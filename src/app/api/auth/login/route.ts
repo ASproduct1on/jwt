@@ -1,30 +1,27 @@
-import type { NextRequest } from 'next/server'
-import { NextResponse } from 'next/server'
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-	const body = await req.json()
-	console.log('Данные из формы:', body)
+	const body = await req.json();
+	console.log("Данные из формы:", body);
 
-	const apiUrl = 'https://video-blog-nestjs.vercel.app'
+	const apiUrl = "https://video-blog-nestjs.vercel.app";
 
 	const res = await fetch(`${apiUrl}/auth/login`, {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify(body),
-	})
+	});
 
 	if (!res.ok) {
-		return NextResponse.json(
-			{ error: 'Неверный логин или пароль' },
-			{ status: 401 }
-		)
+		return NextResponse.json({ error: "Неверный логин или пароль" }, { status: 401 });
 	}
 
-	const data = await res.json()
-	const token = data.accessToken
+	const data = await res.json();
+	const token = data.accessToken;
 
-	const response = NextResponse.json({ success: true })
-	response.cookies.set('token', token, { httpOnly: true, path: '/' })
+	const response = NextResponse.json({ success: true });
+	response.cookies.set("token", token, { httpOnly: true, path: "/" });
 
-	return response
+	return response;
 }
